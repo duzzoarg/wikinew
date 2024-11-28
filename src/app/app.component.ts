@@ -1,12 +1,28 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common'; // Importar CommonModule
+import { WikipediaService } from './wikipedia.service';
+
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrls: ['./app.component.css'],
+  standalone: true,
+  imports: [FormsModule, CommonModule], // HttpClientModule ya no es necesario aquí
 })
 export class AppComponent {
-  title = 'wikinew';
+  title = 'wikipedia-search';
+  searchTerm: string = '';
+  searchResults: any[] = [];
+
+
+  constructor(private wikipediaService: WikipediaService) {}
+
+
+  searchWikipedia() {
+    this.wikipediaService.search(this.searchTerm).subscribe((response: any) => {
+      this.searchResults = response.query.search;
+    });
+  }
 }
